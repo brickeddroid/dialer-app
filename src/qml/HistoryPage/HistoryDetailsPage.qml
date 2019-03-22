@@ -38,22 +38,24 @@ Page {
     objectName: "historyDetailsPage"
     anchors.fill: parent
 
-    function getFormattedPhoneLabel(phoneNumber) {
+    function getFormattedPhoneLabel(phoneNumber, prioName) {
         if (phoneNumber == "x-ofono-private") {
             return i18n.tr("Private number")
         } else if (phoneNumber == "x-ofono-unknown") {
             return i18n.tr("Unknown number")
-        } else if (contactWatcher.alias != "") {
+        } else if (prioName && contactWatcher.alias != "") {
             return contactWatcher.alias
         }
         var formattedPhoneNumber = PhoneUtils.PhoneUtils.format(phoneNumber)
         if (formattedPhoneNumber !== "") {
             return formattedPhoneNumber
+        } else if(contactWatcher.alias != "") {
+            return contactWatcher.alias
         }
         return phoneNumber
     }
 
-    title: getFormattedPhoneLabel(phoneNumber)
+    title: getFormattedPhoneLabel(phoneNumber, true)
 
     header: PageHeader {
         id: pageHeader
@@ -151,7 +153,7 @@ Page {
                 }
                 verticalAlignment: Text.AlignTop
                 fontSize: "medium"
-                text: getFormattedPhoneLabel(phoneNumber)
+                text: getFormattedPhoneLabel(phoneNumber, false)
                 elide: Text.ElideRight
                 color: UbuntuColors.darkGrey
                 height: units.gu(2)
